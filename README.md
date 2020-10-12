@@ -1,2 +1,0 @@
-# MobileIonic
-Ionic React repository
