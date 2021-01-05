@@ -2,10 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { getLogger } from '../core';
 import { login as loginApi } from './authApi';
+import { Plugins } from '@capacitor/core';
 
 const log = getLogger('AuthProvider');
 
 type LoginFn = (username?: string, password?: string) => void;
+
+export const { Storage } = Plugins;
 
 export interface AuthState {
   authenticationError: Error | null;
@@ -34,9 +37,12 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [state, setState] = useState<AuthState>(initialState);
-  const { isAuthenticated, isAuthenticating, authenticationError, pendingAuthentication, token } = state;
+  var { isAuthenticated, isAuthenticating, authenticationError, pendingAuthentication, token } = state;
   const login = useCallback<LoginFn>(loginCallback, []);
   useEffect(authenticationEffect, [pendingAuthentication]);
+
+  // isAuthenticated = c;
+  // var isAuthenticated = checkForLoggedUser();
   const value = { isAuthenticated, login, isAuthenticating, authenticationError, token };
   log('render');
   return (
@@ -52,6 +58,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       pendingAuthentication: true,
       username,
       password
+    });
+  }
+
+  function checkForLoggedUser(): boolean {
+          // Loading value by key ({ key: string }) => Promise<{ value: string | null }>
+    (async () => {
+      const res = await Storage.get({ key: 'user' });
+      if (res.value) {
+        console.log('User foundddddd', JSON.parse(res.value));
+        return true;
+      } else {
+        console.log('User not foundddddd');
+        return false;
+      }
+    })();
+    return false;
+  }
+
+  async function saveCurrentUser(username?: string, password?: string) {
+    await Storage.set({
+      key: 'user',
+      value: JSON.stringify({
+        username: username, password: password,
+      })
     });
   }
 
@@ -79,6 +109,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           return;
         }
         log('authenticate succeeded');
+        // saveCurrentUser(username, password);
         setState({
           ...state,
           token,

@@ -77,7 +77,7 @@ const Tab2: React.FC = () => {
         <IonInfiniteScroll threshold="100px" disabled={disableInfiniteScroll}
                            onIonInfinite={(e: CustomEvent<void>) => searchNext(e)}>
           <IonInfiniteScrollContent
-            loadingText="Loading more good doggos...">
+            loadingText="Fetching data...">
           </IonInfiniteScrollContent>
         </IonInfiniteScroll>
       </IonContent>

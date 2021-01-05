@@ -59,10 +59,10 @@ const App: React.FC = () => (
             <IonIcon icon={infinite} />
             <IonLabel>Infinite Scrolling</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="tab3" href="/tab3">
+          {/* <IonTabButton tab="tab3" href="/tab3">
             <IonIcon icon={star} />
             <IonLabel>Tab 3</IonLabel>
-          </IonTabButton>
+          </IonTabButton> */}
         </IonTabBar>
       </IonTabs>
     </IonReactRouter>
